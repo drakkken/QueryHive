@@ -7,6 +7,35 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 
+const questions = [
+  {
+    id: 1,
+    title: "soemhing",
+    tags: [
+      { id: 1, name: "python" },
+      { id: 2, name: "sql" },
+    ],
+    author: "jogn doe",
+    upvote: 10,
+    views: 100,
+    answers: 2,
+    createdAt: "2021-09-01T13:00:00.00z",
+  },
+  {
+    id: 2,
+    title: "div centering",
+    tags: [
+      { id: 1, name: "python" },
+      { id: 2, name: "sql" },
+    ],
+    author: "jogn doe",
+    upvote: 10,
+    views: 100,
+    answers: 2,
+    createdAt: "2021-09-01T13:00:00.00z",
+  },
+];
+
 const page = () => {
   return (
     <>
@@ -36,6 +65,11 @@ const page = () => {
         />
       </div>
       <HomeFilters />
+      <div className=" border border-white mt-10 flex w-full flex-col  gap-6">
+        {questions.map((item) => (
+          <div>question card</div>
+        ))}
+      </div>
     </>
   );
 };

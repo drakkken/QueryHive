@@ -5,18 +5,18 @@ import RenderTags from "../RenderTags";
 
 const Rightsidebar = () => {
   const hotQuestions = [
-    { id: 1, title: "how do i use custom as a class in Next.js" },
-    { id: 4, title: "how to do that" },
-    { id: 3, title: "how to do that" },
-    { id: 2, title: "how to do that" },
+    { id: "1", title: "how do i use custom as a class in Next.js" },
+    { id: "4", title: "how to do that" },
+    { id: "3", title: "how to do that" },
+    { id: "2", title: "how to do that" },
   ];
 
   const Tags = [
-    { id: 1, name: "tag1", questions: 3 },
-    { id: 2, name: "tag1", questions: 3 },
-    { id: 3, name: "tag1", questions: 3 },
-    { id: 4, name: "tag1", questions: 3 },
-    { id: 5, name: "tag1", questions: 3 },
+    { id: "1", name: "tag1", questions: 3 },
+    { id: "2", name: "tag1", questions: 3 },
+    { id: "3", name: "tag1", questions: 3 },
+    { id: "4", name: "tag1", questions: 3 },
+    { id: "5", name: "tag1", questions: 3 },
   ];
 
   return (

@@ -63,7 +63,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 :root {
-  --color-primary-100: #fff1e6;
+  --color-primary-100: #fff1e6
   --color-primary-500: #ff7000;
   --color-dark-100: #000000;
   --color-dark-200: #0f1117;
@@ -116,6 +116,13 @@
 @utility background-light900_dark300 {
   @apply bg-light-900 dark:bg-dark-300;
 }
+
+@utility card-wrapper {
+  @apply bg-light-900 dark:bg-dark-300 shadow-light-400 dark:shadow-dark-100;
+}
+
+
+
 @utility dark-gradient {
   background: linear-gradient(
     232deg,
@@ -577,7 +584,12 @@
 @utility text-dark400_light800 {
   @apply text-dark-400 dark:text-light-800;
 }
-
+@utility flex-between {
+  @apply flex justify-between items-center;
+}
+@utility flex-center {
+  @apply flex justify-center items-center;
+}
 @utility text-light400_light500 {
   @apply text-light-400! dark:text-light-500!;
   @apply text-light-400! dark:text-light-500!;

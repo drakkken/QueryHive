@@ -53,10 +53,10 @@ const page = () => {
       <div className="  flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
         <h1 className="h1-bold text-dark100_light900">All questions</h1>
         <Link
-          href={"/ask-question"}
+          href={"/ask-questions"}
           className="flex justify-end  w- max-sm:w-full  "
         >
-          <Button className="primary-gradient min-h-[46]  !text-light-900   px-4 py-3 ">
+          <Button className="primary-gradient min-h-[46] cursor-pointer !text-light-900   px-4 py-3 ">
             ask a question
           </Button>
         </Link>

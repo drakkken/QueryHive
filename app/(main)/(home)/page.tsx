@@ -5,49 +5,54 @@ import Filter from "@/components/shared/Filter";
 import NoResult from "@/components/shared/NoResult";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { Button } from "@/components/ui/button";
+import { getQuestion } from "@/lib/Actions/question.action";
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 
-const questions = [
-  {
-    id: "1",
-    title:
-      "something that does not bother me somtimes in life  i want ot duck my own dick",
-    tags: [
-      { id: "1", name: "python" },
-      { id: "2", name: "sql" },
-    ],
-    author: {
-      id: "1",
-      name: "John Doe",
-      picture: "https://example.com/profile.jpg",
-    },
-    upvote: 10,
-    views: 100,
-    answers: [{}, {}],
-    createdAt: new Date(),
-  },
-  {
-    id: "2",
-    title: "div centering",
-    tags: [
-      { id: "1", name: "python" },
-      { id: "2", name: "sql" },
-    ],
-    author: {
-      id: "1",
-      name: "John Doe",
-      picture: "https://example.com/profile.jpg",
-    },
-    upvote: 10000000000,
-    views: 4800599,
-    answers: [{}, {}],
-    createdAt: new Date(),
-  },
-];
+// const questions = [
+//   {
+//     id: "1",
+//     title:
+//       "something that does not bother me somtimes in life  i want ot duck my own dick",
+//     tags: [
+//       { id: "1", name: "python" },
+//       { id: "2", name: "sql" },
+//     ],
+//     author: {
+//       id: "1",
+//       name: "John Doe",
+//       picture: "https://example.com/profile.jpg",
+//     },
+//     upvote: 10,
+//     views: 100,
+//     answers: [{}, {}],
+//     createdAt: new Date(),
+//   },
+//   {
+//     id: "2",
+//     title: "div centering",
+//     tags: [
+//       { id: "1", name: "python" },
+//       { id: "2", name: "sql" },
+//     ],
+//     author: {
+//       id: "1",
+//       name: "John Doe",
+//       picture: "https://example.com/profile.jpg",
+//     },
+//     upvote: 10000000000,
+//     views: 4800599,
+//     answers: [{}, {}],
+//     createdAt: new Date(),
+//   },
+// ];
 
-const page = () => {
+const page = async () => {
+  // const result =
+  const result: any = await getQuestion({});
+  const questions = result.questions;
+  // console.log(result);
   return (
     <>
       <div className="  flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -78,15 +83,15 @@ const page = () => {
       <HomeFilters />
       <div className="  mt-10 flex w-full flex-col  gap-6">
         {questions.length > 0 ? (
-          questions.map((item) => (
-            <div>
+          questions.map((item: any) => (
+            <div key={item.id}>
               <QuestionCard
                 key={item.id}
                 id={item.id}
                 title={item.title}
                 tags={item.tags}
                 author={item.author}
-                upvote={item.upvote}
+                upvote={item.upvotes}
                 views={item.views}
                 answers={item.answers}
                 createdAt={item.createdAt}
@@ -100,7 +105,7 @@ const page = () => {
         discussion. Your query could be the next big thing others learn from.
         Get involved! 💡
         "
-            link="/ask-question"
+            link="/ask-questions"
             linkTitle="ask a question"
           />
         )}

@@ -13,14 +13,14 @@ const Navbar = () => (
       <Link href={"/"} className="flex items-center gap-1 ">
         <Image
           className="pt-1 hidden dark:block  hover:scale-150  transition-transform duration-300 transform"
-          src={"/assets/images/logo-dark.svg"}
+          src={"/assets/images/Untitled design(3).svg"}
           alt={"logo"}
-          height={250}
-          width={100}
+          height={270}
+          width={110}
         />
         <Image
-          className="pt-1 block dark:hidden"
-          src={"/assets/images/logo-light.svg"}
+          className="pt-1 block dark:hidden hover:scale-150 transition-transform duration-300 transform"
+          src={"/assets/images/logo2 (1).png"}
           alt={"logo"}
           height={100}
           width={100}

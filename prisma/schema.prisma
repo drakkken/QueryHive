@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id               String   @id @default(cuid())
+  clerkId          String   @unique
+  name             String
+  username         String   @unique
+  email            String   @unique
+  password         String?
+  bio              String?
+  picture          String?
+  location         String?
+  portfolioWebsite String?
+  reputation       Int      @default(0)
+  joinedAt         DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  questions     Question[]
+  // savedQuestions Question[] @relation("SavedQuestions")
+  
+  @@map("users")
+}
+
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  questions Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  QuestionList Question[] @relation("TOQ")
+  
+  @@map("tags")
+}
+
+
+model Question {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  views     Int      @default(0)
+  upvotes   Int      @default(0)
+  downvotes Int      @default(0)
+  answers   Int      @default(0)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  author User  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  tags   Tag[] @relation("TOQ")
+
+  @@map("questions")
+}

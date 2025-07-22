@@ -50,7 +50,7 @@ const QuestionCard = ({
         {/* if signed in add delete actions lallalal */}
       </div>
       <div className="mt-3.5 flex flex-wrap  gap-2 ">
-        {tags.map((item) => (
+        {tags.map((item: any) => (
           <RenderTags
             classname2={"background-dark400_light900"}
             key={item.id}
@@ -72,21 +72,21 @@ const QuestionCard = ({
         <Metric
           imgUrl="/assets/icons/like.svg"
           alt="Upvotes"
-          value={formatNumber(upvote)}
+          value={formatNumber(upvote ?? 0)}
           title=" Votes"
           textStyles="small-medium text-dark400_light800"
         />
         <Metric
           imgUrl="/assets/icons/message.svg"
           alt="messafe"
-          value={formatNumber(answers.length)}
+          value={formatNumber(answers.length ?? 0)}
           title=" Answers"
           textStyles="small-medium text-dark400_light800"
         />
         <Metric
           imgUrl="/assets/icons/eye.svg"
           alt="views"
-          value={formatNumber(views)}
+          value={formatNumber(views ?? 0)}
           title=" Votes"
           textStyles="small-medium text-dark400_light800"
         />

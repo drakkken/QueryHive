@@ -18,6 +18,7 @@ export async function getUserById(params: any) {
     return user;
   } catch (e) {
     console.log(e);
+    throw new Error("error");
   }
 }
 export async function createUser(userParams: CreateUserParams) {
@@ -28,6 +29,7 @@ export async function createUser(userParams: CreateUserParams) {
     return newUser;
   } catch (e) {
     console.log(e);
+    throw new Error("error");
   }
 }
 export async function updateUser(params: UpdateUserParams) {
@@ -40,6 +42,7 @@ export async function updateUser(params: UpdateUserParams) {
     revalidatePath(path);
   } catch (e) {
     console.log(e);
+    throw new Error("new");
   }
 }
 export async function deleteUser(params: DeleteUserParams) {
@@ -69,5 +72,6 @@ export async function deleteUser(params: DeleteUserParams) {
     //revalidatePath(path);
   } catch (e) {
     console.log(e);
+    throw new Error("error");
   }
 }

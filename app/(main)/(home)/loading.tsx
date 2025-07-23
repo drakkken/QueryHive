@@ -1,4 +1,4 @@
-export default function () {
+export default function Loading() {
   return (
     <div>
       <div className="min-h-screen bg-transparent flex items-center justify-center relative overflow-hidden">

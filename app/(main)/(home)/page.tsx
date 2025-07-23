@@ -6,7 +6,7 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearchBar from "@/components/shared/search/LocalSearchBar";
 import { Button } from "@/components/ui/button";
 import { getQuestion } from "@/lib/Actions/question.action";
-import { UserButton } from "@clerk/nextjs";
+
 import Link from "next/link";
 import React from "react";
 

@@ -22,9 +22,9 @@ export async function getQuestion(params: GetQuestionsParams) {
   }
 }
 
-export async function createQuestion(params: CreateQuestionParams) {
+export async function createQuestion(params: any) {
   try {
-    const { title, content, tags, authorId, path } = params;
+    const { title, content, tags, authorId /*path*/ } = params;
     // making the question in the databse
     const question = await prisma.question.create({
       data: {

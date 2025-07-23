@@ -7,7 +7,7 @@ const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET || "";
 
 export async function POST(req: Request) {
   const payload = await req.text();
-  const headerPayload = await headers(); // Add await here
+  const headerPayload = headers(); // Add await here
 
   const heads = {
     "svix-id": headerPayload.get("svix-id") || "",

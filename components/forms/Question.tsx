@@ -49,7 +49,7 @@ const Question = ({ prismaUserId }: any) => {
         content: values.explanation,
         tags: values.tags,
         authorId: JSON.parse(prismaUserId),
-      });
+      } as any);
 
       router.push("/");
     } catch (error) {

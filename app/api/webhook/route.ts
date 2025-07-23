@@ -2,7 +2,7 @@ import { Webhook } from "svix";
 import { NextRequest, NextResponse } from "next/server";
 import { createUser, deleteUser, updateUser } from "@/lib/Actions/UserAction";
 
-const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET || "";
+const WEBHOOK_SECRET = "";
 
 export async function POST(req: NextRequest) {
   try {

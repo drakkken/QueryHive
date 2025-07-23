@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { createUser, deleteUser, updateUser } from "@/lib/Actions/UserAction";
 
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || "";
+const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET || "";
 
 export async function POST(req: NextRequest) {
   try {

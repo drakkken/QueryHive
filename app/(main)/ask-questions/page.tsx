@@ -7,7 +7,7 @@ import React from "react";
 
 const page = async () => {
   // const { userId }: any = auth();
-  const userId = "clerk_123456";
+  const userId = "";
   if (!userId) redirect("/sign-in");
   const prismaUser: any = await getUserById({ userId });
   console.log(prismaUser);

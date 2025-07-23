@@ -64,7 +64,7 @@ export interface CreateQuestionParams {
   title: string;
   content: string;
   tags: string[];
-  author: string | User; // User ID string or User object
+  authorId: string | User; // User ID string or User object
   path: string;
 }
 

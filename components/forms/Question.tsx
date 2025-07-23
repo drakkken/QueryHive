@@ -17,8 +17,7 @@ import {
 import { useTheme } from "next-themes";
 import { Input } from "@/components/ui/input";
 import { QuestionSchema } from "@/lib/validations";
-import { themes } from "@/app/constants";
-import { Tags } from "lucide-react";
+
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/Actions/question.action";

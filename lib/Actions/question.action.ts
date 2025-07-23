@@ -1,7 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { PrismaClient } from "../generated/prisma";
-import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import { GetQuestionsParams } from "./shared.types";
 
 const prisma = new PrismaClient();
 

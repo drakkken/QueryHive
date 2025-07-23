@@ -60,13 +60,13 @@ export interface GetQuestionsParams {
   filter?: string;
 }
 
-export interface CreateQuestionParams {
-  title: string;
-  content: string;
-  tags: string[];
-  authorId: string | User; // User ID string or User object
-  path: string;
-}
+// export interface CreateQuestionParams {
+//   title: string;
+//   content: string;
+//   tags: string[];
+//   authorId?: string | User; // User ID string or User object
+//   path?: string;
+// }
 
 export interface GetQuestionByIdParams {
   questionId: string;

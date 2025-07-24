@@ -1,7 +1,5 @@
 import { Webhook } from "svix";
-
 import { NextRequest, NextResponse } from "next/server";
-
 import { createUser, deleteUser, updateUser } from "@/lib/Actions/UserAction";
 
 const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET || "";
@@ -11,124 +9,127 @@ export async function POST(req: NextRequest) {
 
   try {
     const payload = await req.text();
-
     const headersList = req.headers;
+
+    // Extract required webhook headers
     const heads = {
       "svix-id": headersList.get("svix-id") ?? "",
       "svix-timestamp": headersList.get("svix-timestamp") ?? "",
       "svix-signature": headersList.get("svix-signature") ?? "",
     };
+
+    // Validate secret exists
     if (!WEBHOOK_SECRET) {
       console.error("❌ Missing WEBHOOK_SECRET");
+      return NextResponse.json(
+        { error: "Missing webhook secret" },
+        { status: 500 }
+      );
     }
 
+    // Initialize webhook verifier
     const svix = new Webhook(WEBHOOK_SECRET);
-
     let evt: any;
 
+    // Verify webhook signature
     try {
       evt = svix.verify(payload, heads);
     } catch (err) {
       console.error("Webhook verification failed", err);
-
       return NextResponse.json(
-        { message: "Webhook verification failed" },
-
-        { status: 400 }
+        { error: "Invalid webhook signature" },
+        { status: 401 }
       );
     }
 
     const eventType = evt.type;
-
     const eventData = evt.data;
-
-    const { id } = evt.data; // Note: You had evt.id, but it should be evt.data.id
 
     console.log("🔔 Clerk webhook received:", eventType, eventData);
 
-    if (eventType === "user.created") {
-      const {
-        id,
+    switch (eventType) {
+      case "user.created":
+        try {
+          const {
+            id,
+            email_addresses,
+            image_url,
+            username,
+            first_name,
+            last_name,
+          } = eventData;
 
-        email_addresses,
+          const prismaUser = await createUser({
+            clerkId: id,
+            name: `${first_name}${last_name ? ` ${last_name}` : ""}`,
+            username: username || "",
+            email: email_addresses[0]?.email_address || "",
+            picture: image_url || "",
+          });
 
-        image_url,
+          return NextResponse.json({ message: "OK", user: prismaUser });
+        } catch (error) {
+          console.error("Error creating user:", error);
+          return NextResponse.json(
+            { error: "Failed to create user" },
+            { status: 500 }
+          );
+        }
 
-        username,
+      case "user.updated":
+        try {
+          const {
+            id,
+            email_addresses,
+            image_url,
+            username,
+            first_name,
+            last_name,
+          } = eventData;
 
-        first_name,
+          const prismaUser = await updateUser({
+            clerkId: id,
+            updateData: {
+              name: `${first_name}${last_name ? ` ${last_name}` : ""}`,
+              username: username || "",
+              email: email_addresses[0]?.email_address || "",
+              picture: image_url || "",
+            },
+            path: `/profile/${id}`,
+          });
 
-        last_name,
-      } = eventData;
+          return NextResponse.json({ message: "OK", user: prismaUser });
+        } catch (error) {
+          console.error("Error updating user:", error);
+          return NextResponse.json(
+            { error: "Failed to update user" },
+            { status: 500 }
+          );
+        }
 
-      const prismaUser = await createUser({
-        clerkId: id,
+      case "user.deleted":
+        try {
+          const { id } = eventData;
+          await deleteUser({ clerkId: id });
+          return NextResponse.json({ message: "OK" });
+        } catch (error) {
+          console.error("Error deleting user:", error);
+          return NextResponse.json(
+            { error: "Failed to delete user" },
+            { status: 500 }
+          );
+        }
 
-        name: `${first_name}${last_name ? ` ${last_name}` : ""}`,
-
-        username: username || "", // Handle null/undefined username
-
-        email: email_addresses[0]?.email_address || "",
-
-        picture: image_url || "",
-      });
-
-      return NextResponse.json({ message: "OK", user: prismaUser });
+      default:
+        return NextResponse.json(
+          { error: "Unsupported event type" },
+          { status: 400 }
+        );
     }
-
-    if (eventType === "user.updated") {
-      const {
-        id,
-
-        email_addresses,
-
-        image_url,
-
-        username,
-
-        first_name,
-
-        last_name,
-      } = eventData;
-
-      const prismaUser = await updateUser({
-        clerkId: id,
-
-        updateData: {
-          name: `${first_name}${last_name ? ` ${last_name}` : ""}`,
-
-          username: username || "",
-
-          email: email_addresses[0]?.email_address || "",
-
-          picture: image_url || "",
-        },
-
-        path: `/profile/${id}`,
-      });
-
-      return NextResponse.json({ message: "OK", user: prismaUser });
-    }
-
-    if (eventType === "user.deleted") {
-      const { id } = eventData;
-
-      const prismaUser = await deleteUser({ clerkId: id });
-
-      return NextResponse.json({ message: "OK", user: prismaUser });
-    }
-
-    return NextResponse.json(
-      { message: "Event type not supported" },
-
-      { status: 400 }
-    );
   } catch (error) {
-    console.error("Error processing webhook:", error);
-
+    console.error("Unexpected error processing webhook:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
-
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

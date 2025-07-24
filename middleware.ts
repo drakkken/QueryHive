@@ -1,16 +1,21 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
+// Define public routes that don't require authentication
+const isPublicRoute = createRouteMatcher([
+  "/",
+  "/question/:id",
+  "/tags/:id",
+  "/profile/:id",
+  "/community",
+  "/jobs",
+  "/api/webhook", // Keep webhook public but handle auth separately if needed
+]);
+
 export default clerkMiddleware(async (auth, req) => {
-  publicRoutes: [
-    "/",
-    "/api/webhook",
-    "/question:id",
-    "tags/:id",
-    "/profile/:id",
-    "community",
-    "/jobs",
-  ];
-  ignoredRoutes: ["/api/webhook"];
+  // Protect all routes except public ones
+  if (!isPublicRoute(req)) {
+    await auth.protect();
+  }
 });
 
 export const config = {
@@ -21,6 +26,3 @@ export const config = {
     "/(api|trpc)(.*)",
   ],
 };
-function authMiddleware() {
-  throw new Error("Function not implemented.");
-}

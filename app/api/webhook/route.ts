@@ -11,14 +11,12 @@ export async function POST(req: NextRequest) {
     const payload = await req.text();
     const headersList = req.headers;
 
-    // Extract required webhook headers
     const heads = {
       "svix-id": headersList.get("svix-id") ?? "",
       "svix-timestamp": headersList.get("svix-timestamp") ?? "",
       "svix-signature": headersList.get("svix-signature") ?? "",
     };
 
-    // Validate secret exists
     if (!WEBHOOK_SECRET) {
       console.error("❌ Missing WEBHOOK_SECRET");
       return NextResponse.json(
@@ -27,15 +25,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Initialize webhook verifier
     const svix = new Webhook(WEBHOOK_SECRET);
     let evt: any;
 
-    // Verify webhook signature
     try {
       evt = svix.verify(payload, heads);
     } catch (err) {
-      console.error("Webhook verification failed", err);
+      console.error("❌ Webhook verification failed", err);
       return NextResponse.json(
         { error: "Invalid webhook signature" },
         { status: 401 }
@@ -45,7 +41,8 @@ export async function POST(req: NextRequest) {
     const eventType = evt.type;
     const eventData = evt.data;
 
-    console.log("🔔 Clerk webhook received:", eventType, eventData);
+    console.log("🔔 Clerk webhook received:", eventType);
+    console.log("📦 Event Data:", JSON.stringify(eventData, null, 2));
 
     switch (eventType) {
       case "user.created":
@@ -59,17 +56,19 @@ export async function POST(req: NextRequest) {
             last_name,
           } = eventData;
 
+          const name = `${first_name || ""}${last_name ? ` ${last_name}` : ""}`;
+
           const prismaUser = await createUser({
             clerkId: id,
-            name: `${first_name}${last_name ? ` ${last_name}` : ""}`,
+            name,
             username: username || "",
-            email: email_addresses[0]?.email_address || "",
+            email: email_addresses?.[0]?.email_address || "",
             picture: image_url || "",
           });
 
           return NextResponse.json({ message: "OK", user: prismaUser });
         } catch (error) {
-          console.error("Error creating user:", error);
+          console.error("❌ Error creating user:", error);
           return NextResponse.json(
             { error: "Failed to create user" },
             { status: 500 }
@@ -87,12 +86,14 @@ export async function POST(req: NextRequest) {
             last_name,
           } = eventData;
 
+          const name = `${first_name || ""}${last_name ? ` ${last_name}` : ""}`;
+
           const prismaUser = await updateUser({
             clerkId: id,
             updateData: {
-              name: `${first_name}${last_name ? ` ${last_name}` : ""}`,
+              name,
               username: username || "",
-              email: email_addresses[0]?.email_address || "",
+              email: email_addresses?.[0]?.email_address || "",
               picture: image_url || "",
             },
             path: `/profile/${id}`,
@@ -100,7 +101,7 @@ export async function POST(req: NextRequest) {
 
           return NextResponse.json({ message: "OK", user: prismaUser });
         } catch (error) {
-          console.error("Error updating user:", error);
+          console.error("❌ Error updating user:", error);
           return NextResponse.json(
             { error: "Failed to update user" },
             { status: 500 }
@@ -113,7 +114,7 @@ export async function POST(req: NextRequest) {
           await deleteUser({ clerkId: id });
           return NextResponse.json({ message: "OK" });
         } catch (error) {
-          console.error("Error deleting user:", error);
+          console.error("❌ Error deleting user:", error);
           return NextResponse.json(
             { error: "Failed to delete user" },
             { status: 500 }
@@ -127,7 +128,7 @@ export async function POST(req: NextRequest) {
         );
     }
   } catch (error) {
-    console.error("Unexpected error processing webhook:", error);
+    console.error("❌ Unexpected error processing webhook:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

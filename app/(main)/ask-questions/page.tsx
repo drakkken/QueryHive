@@ -1,13 +1,13 @@
 import Question from "@/components/forms/Question";
 import { getUserById } from "@/lib/Actions/UserAction";
-// import { auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 import { RedirectType, redirect } from "next/navigation";
 import React from "react";
 
 const page = async () => {
-  // const { userId }: any = auth();
-  const userId = "";
+  const { userId }: any = auth();
+  // const userId = "";
   if (!userId) redirect("/sign-in");
   const prismaUser: any = await getUserById({ userId });
   console.log(prismaUser);

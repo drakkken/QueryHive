@@ -7,18 +7,20 @@ import { createUser, deleteUser, updateUser } from "@/lib/Actions/UserAction";
 const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET || "";
 
 export async function POST(req: NextRequest) {
+  console.log("✅ Webhook hit");
+
   try {
     const payload = await req.text();
 
-    const headers = Object.fromEntries(req.headers); // Access headers from req
-
+    const headersList = req.headers;
     const heads = {
-      "svix-id": headers["svix-id"] || "",
-
-      "svix-timestamp": headers["svix-timestamp"] || "",
-
-      "svix-signature": headers["svix-signature"] || "",
+      "svix-id": headersList.get("svix-id") ?? "",
+      "svix-timestamp": headersList.get("svix-timestamp") ?? "",
+      "svix-signature": headersList.get("svix-signature") ?? "",
     };
+    if (!WEBHOOK_SECRET) {
+      console.error("❌ Missing WEBHOOK_SECRET");
+    }
 
     const svix = new Webhook(WEBHOOK_SECRET);
 
